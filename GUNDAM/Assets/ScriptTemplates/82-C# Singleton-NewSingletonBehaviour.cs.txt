@@ -1,0 +1,42 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class #SCRIPTNAME# : SingletonBehaviour<#SCRIPTNAME#>
+{
+#region Behaviour継承
+
+    //protected override void doAwake()
+    //{
+    //
+    //}
+
+    //protected override void doStart()
+    //{
+    //
+    //}
+    
+    //protected override void doUpdate()
+    //{
+    //
+    //}
+
+#endregion
+
+#region 継承禁止
+    // 使用禁止。doAwake継承
+    //void Awake()
+    //{
+    //}
+
+    // 使用禁止。doStart継承
+    //void Start()
+    //{
+    //}
+
+    // 使用禁止。doUpdate継承
+    //void Update()
+    //{
+    //}
+#endregion
+}

@@ -25,18 +25,18 @@ public class #SCRIPTNAME# : SingletonBehaviour<#SCRIPTNAME#>
 
 #region 継承禁止
     // 使用禁止。doAwake継承
-    //void Awake()
-    //{
-    //}
+    void Awake()
+    {
+    }
 
     // 使用禁止。doStart継承
-    //void Start()
-    //{
-    //}
+    void Start()
+    {
+    }
 
     // 使用禁止。doUpdate継承
-    //void Update()
-    //{
-    //}
+    void Update()
+    {
+    }
 #endregion
 }

@@ -51,7 +51,10 @@ namespace app
 
                 if (CurrentPhase.IsInit)
                 {
-                    CurrentPhase.Start();
+                    if (CurrentPhase.Start != null)
+                    {
+                        CurrentPhase.Start();
+                    }
                 }
 
                 return CurrentPhase.Update();
@@ -70,6 +73,10 @@ namespace app
 
         protected FlowPhase Phase = new FlowPhase();
 
+        protected virtual FlowDefine.GameFlowType FlowType { get; set; }
+        private List<FlowDefine.GameFlowType> RequestFlowTypes = new List<FlowDefine.GameFlowType>();
+        private bool EndFlow = false;
+
         private void Awake()
         {
             RegistPhase();
@@ -79,19 +86,51 @@ namespace app
 
         private void Update()
         {
-            var flowState = Phase.Update();
-            var endFlow = false;
+            if (!EndFlow)
+            {
+                var flowState = Phase.Update();
+                var endFlow = false;
 
-            if (flowState == FlowState.NEXT)
-            {
-                endFlow = !Phase.Next();
+                if (flowState == FlowState.NEXT)
+                {
+                    endFlow = !Phase.Next();
+                }
+                else if (flowState == FlowState.END)
+                {
+                    endFlow = true;
+                }
+                EndFlow = endFlow;
             }
-            else if (flowState == FlowState.END)
+        }
+
+        private void LateUpdate()
+        {
+            lock (RequestFlowTypes)
             {
-                endFlow = true;
+                foreach (var requestFlowType in RequestFlowTypes)
+                {
+                    if (FlowManager.IsInstanceEnable)
+                    {
+                        FlowManager.Instance.RequestLoad(requestFlowType);
+                    }
+                }
+            }
+            RequestFlowTypes.Clear();
+
+            if (EndFlow)
+            {
+                if (FlowManager.IsInstanceEnable)
+                {
+                    FlowManager.Instance.RequestUnload(FlowType);
+                }
             }
         }
 
         protected virtual void RegistPhase() { }
+
+        protected void RequestFlowStart(FlowDefine.GameFlowType flowType)
+        {
+            RequestFlowTypes.Add(flowType);
+        }
     }
 }

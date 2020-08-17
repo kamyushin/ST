@@ -7,6 +7,17 @@ namespace app
 {
     public class FlowManager : SingletonBehaviour<FlowManager>
     {
+        public void RequestLoad(FlowDefine.GameFlowType type)
+        {
+            string[] loadSceneNames = null;
+            FlowDefine.LoadSceneNames.TryGetValue(type, out loadSceneNames);
+
+            foreach(var sceneName in loadSceneNames)
+            {
+                RequestLoad(sceneName);
+            }
+        }
+
         public void RequestLoad(string sceneName)
         {
             SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
@@ -16,6 +27,17 @@ namespace app
         {
             SceneManager.UnloadSceneAsync(sceneName);
             Resources.UnloadUnusedAssets();
+        }
+
+        public void RequestUnload(FlowDefine.GameFlowType type)
+        {
+            string[] loadSceneNames = null;
+            FlowDefine.LoadSceneNames.TryGetValue(type, out loadSceneNames);
+
+            foreach (var sceneName in loadSceneNames)
+            {
+                RequestUnload(sceneName);
+            }
         }
 
         #region Behaviour継承

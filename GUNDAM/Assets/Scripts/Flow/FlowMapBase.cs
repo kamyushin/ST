@@ -4,9 +4,11 @@ using UnityEngine;
 
 namespace app
 {
-    public class FlowMap : MonoBehaviour
+    public class FlowMapBase : MonoBehaviour
     {
-         
+
+        List<FlowBase> FlowList = new List<FlowBase>();
+        
         // Start is called before the first frame update
         void Start()
         {
@@ -16,6 +18,11 @@ namespace app
         void Update()
         {
 
+        }
+
+        public void Next()
+        {
+            
         }
     }
 }

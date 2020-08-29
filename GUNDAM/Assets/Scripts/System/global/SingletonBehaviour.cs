@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace app
 {
+    [DefaultExecutionOrder((int)ExecutionOrder.SYSTEM)]
     public abstract class SingletonBehaviour<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static T instance;

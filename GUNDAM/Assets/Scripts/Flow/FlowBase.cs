@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace app
 {
+    [DefaultExecutionOrder((int)ExecutionOrder.DEFAULT)]
     public class FlowBase : MonoBehaviour
     {
         public enum FlowState

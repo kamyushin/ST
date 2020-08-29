@@ -2,22 +2,26 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace app
 {
     public class FlowBoot : MonoBehaviour
     {
-        public FlowDefine.GameFlowType BootFlowType = FlowDefine.GameFlowType.Title;
+        void Awake()
+        {
+            var loadOperation = SceneManager.LoadSceneAsync(FlowDefine.ResidentSceneName,LoadSceneMode.Additive);
+            loadOperation.completed += OnResidentLoad;
+        }
 
-        // Start is called before the first frame update
-        void Start()
+        private void OnResidentLoad(UnityEngine.AsyncOperation operation)
         {
             if (FlowManager.IsInstanceEnable)
             {
-                FlowManager.Instance.RequestLoad(BootFlowType);
+                FlowManager.Instance.RequestLoad(FlowDefine.GameFlowType.Title);
+                SceneManager.UnloadSceneAsync(FlowDefine.BootSceneName);
+                Resources.UnloadUnusedAssets();
             }
-
-            Destroy(this.gameObject);
         }
     }
 }

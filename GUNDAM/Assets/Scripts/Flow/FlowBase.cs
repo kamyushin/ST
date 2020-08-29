@@ -80,6 +80,10 @@ namespace app
 
         private void Awake()
         {
+#if UNITY_EDITOR
+            CheckResident();
+#endif
+
             RegistPhase();
 
             Phase.Setup();
@@ -106,6 +110,14 @@ namespace app
 
         private void LateUpdate()
         {
+            if (EndFlow)
+            {
+                if (FlowManager.IsInstanceEnable)
+                {
+                    FlowManager.Instance.RequestUnload(FlowType);
+                }
+            }
+
             lock (RequestFlowTypes)
             {
                 foreach (var requestFlowType in RequestFlowTypes)
@@ -117,14 +129,6 @@ namespace app
                 }
             }
             RequestFlowTypes.Clear();
-
-            if (EndFlow)
-            {
-                if (FlowManager.IsInstanceEnable)
-                {
-                    FlowManager.Instance.RequestUnload(FlowType);
-                }
-            }
         }
 
         protected virtual void RegistPhase() { }
@@ -133,5 +137,26 @@ namespace app
         {
             RequestFlowTypes.Add(flowType);
         }
+
+#if UNITY_EDITOR
+        private void CheckResident()
+        {
+            bool loadResident = false;
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var scene = SceneManager.GetSceneAt(i);
+                if (scene.name == FlowDefine.ResidentSceneName)
+                {
+                    loadResident = true;
+                    break;
+                }
+            }
+
+            if (!loadResident)
+            {
+                SceneManager.LoadSceneAsync(FlowDefine.ResidentSceneName, LoadSceneMode.Additive);
+            }
+        }
+#endif
     }
 }

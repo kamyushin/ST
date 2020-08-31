@@ -11,6 +11,8 @@ namespace app
         void Awake()
         {
             var loadOperation = SceneManager.LoadSceneAsync(FlowDefine.ResidentSceneName,LoadSceneMode.Additive);
+
+            loadOperation.allowSceneActivation = true;
             loadOperation.completed += OnResidentLoad;
         }
 
@@ -22,6 +24,8 @@ namespace app
                 SceneManager.UnloadSceneAsync(FlowDefine.BootSceneName);
                 Resources.UnloadUnusedAssets();
             }
+
+            operation.completed -= OnResidentLoad;
         }
     }
 }

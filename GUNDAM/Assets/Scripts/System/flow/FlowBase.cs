@@ -81,6 +81,7 @@ namespace app
         private void Awake()
         {
 #if UNITY_EDITOR
+            //Bootじゃない場合ResidentをLoadしに行く
             CheckResident();
 #endif
 

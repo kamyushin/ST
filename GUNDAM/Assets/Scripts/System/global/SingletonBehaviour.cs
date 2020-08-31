@@ -32,7 +32,7 @@ namespace app
 
         #region Behaviour群
 
-        private void Awake()
+        protected virtual void Awake()
         {
             CheckInstance();
 
@@ -40,13 +40,13 @@ namespace app
         }
 
         // Start is called before the first frame update
-        private void Start()
+        protected virtual void Start()
         {
             doStart();
         }
 
         // Update is called once per frame
-        private void Update()
+        protected virtual void Update()
         {
             doUpdate();
         }

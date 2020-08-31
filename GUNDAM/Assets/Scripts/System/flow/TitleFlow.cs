@@ -18,6 +18,7 @@ namespace app
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                //FadeManager.Instance.FadeOut(3.0f);
                 RequestFlowStart(FlowDefine.GameFlowType.Game);
                 return FlowState.END;
             }

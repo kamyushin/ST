@@ -20,7 +20,8 @@ namespace app
 
         public void RequestLoad(string sceneName)
         {
-            SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            operation.allowSceneActivation = true;
         }
 
         public void RequestUnload(string sceneName)
@@ -44,12 +45,10 @@ namespace app
 
         //protected override void doAwake()
         //{
-        //
         //}
 
         //protected override void doStart()
         //{
-        //
         //}
 
         //protected override void doUpdate()
@@ -61,18 +60,21 @@ namespace app
 
         #region 継承禁止
         // 使用禁止。doAwake継承
-        void Awake()
+        protected override void Awake()
         {
+            base.Awake();
         }
 
         // 使用禁止。doStart継承
-        void Start()
+        protected override void Start()
         {
+            base.Start();
         }
 
         // 使用禁止。doUpdate継承
-        void Update()
+        protected override void Update()
         {
+            base.Update();
         }
         #endregion
     }

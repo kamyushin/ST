@@ -52,18 +52,21 @@ namespace app.Battle
 
         #region 継承禁止
         // 使用禁止。doAwake継承
-        void Awake()
+        protected override void Awake()
         {
+            base.Awake(); 
         }
 
         // 使用禁止。doStart継承
-        void Start()
+        protected override void Start()
         {
+            base.Start();
         }
 
         // 使用禁止。doUpdate継承
-        void Update()
+        protected override void Update()
         {
+            base.Update();
         }
         #endregion
     }

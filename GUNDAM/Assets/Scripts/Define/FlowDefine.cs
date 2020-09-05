@@ -9,16 +9,16 @@ namespace app
         public static string BootSceneName = "Boot";
         public static string ResidentSceneName = "Resident";
 
-        public enum GameFlowType
+        public enum FlowType
         {
             Title,
             Game,
         }
 
-        public static Dictionary<GameFlowType, string[]> LoadSceneNames = new Dictionary<GameFlowType, string[]>
+        public static Dictionary<FlowType, string[]> LoadSceneNames = new Dictionary<FlowType, string[]>
         {
-            { GameFlowType.Title,new string[]{"Title" } },
-            { GameFlowType.Game,new string[]{"Game" } },
+            { FlowType.Title,new string[]{"Title" } },
+            { FlowType.Game,new string[]{"Game" } },
         };
     }
 }

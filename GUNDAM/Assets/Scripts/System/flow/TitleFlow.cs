@@ -6,7 +6,7 @@ namespace app
 {
     public class TitleFlow : FlowBase
     {
-        protected override FlowDefine.GameFlowType FlowType { get { return FlowDefine.GameFlowType.Title; } }
+        protected override FlowDefine.FlowType FlowType { get { return FlowDefine.FlowType.Title; } }
         protected override void RegistPhase()
         {
             base.RegistPhase();
@@ -18,8 +18,8 @@ namespace app
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                //FadeManager.Instance.FadeOut(3.0f);
-                RequestFlowStart(FlowDefine.GameFlowType.Game);
+                FadeManager.Instance.FadeOut(3.0f);
+                //RequestFlowStart(FlowDefine.FlowType.Game);
                 return FlowState.END;
             }
 

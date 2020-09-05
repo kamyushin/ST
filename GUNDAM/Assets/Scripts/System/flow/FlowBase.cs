@@ -74,8 +74,8 @@ namespace app
 
         protected FlowPhase Phase = new FlowPhase();
 
-        protected virtual FlowDefine.GameFlowType FlowType { get; set; }
-        private List<FlowDefine.GameFlowType> RequestFlowTypes = new List<FlowDefine.GameFlowType>();
+        protected virtual FlowDefine.FlowType FlowType { get; set; }
+        private List<FlowDefine.FlowType> RequestFlowTypes = new List<FlowDefine.FlowType>();
         private bool EndFlow = false;
 
         private void Awake()
@@ -134,7 +134,7 @@ namespace app
 
         protected virtual void RegistPhase() { }
 
-        protected void RequestFlowStart(FlowDefine.GameFlowType flowType)
+        protected void RequestFlowStart(FlowDefine.FlowType flowType)
         {
             RequestFlowTypes.Add(flowType);
         }

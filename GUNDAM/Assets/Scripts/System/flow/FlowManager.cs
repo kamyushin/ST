@@ -7,7 +7,9 @@ namespace app
 {
     public class FlowManager : SingletonBehaviour<FlowManager>
     {
-        public void RequestLoad(FlowDefine.GameFlowType type)
+        private FlowListBase CurrentFlowList = null;
+
+        public void RequestLoad(FlowDefine.FlowType type)
         {
             string[] loadSceneNames = null;
             FlowDefine.LoadSceneNames.TryGetValue(type, out loadSceneNames);
@@ -30,7 +32,7 @@ namespace app
             Resources.UnloadUnusedAssets();
         }
 
-        public void RequestUnload(FlowDefine.GameFlowType type)
+        public void RequestUnload(FlowDefine.FlowType type)
         {
             string[] loadSceneNames = null;
             FlowDefine.LoadSceneNames.TryGetValue(type, out loadSceneNames);
@@ -51,10 +53,10 @@ namespace app
         //{
         //}
 
-        //protected override void doUpdate()
-        //{
-        //
-        //}
+        protected override void doUpdate()
+        {
+        
+        }
 
         #endregion
 

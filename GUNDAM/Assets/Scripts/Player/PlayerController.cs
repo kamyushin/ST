@@ -113,25 +113,25 @@ namespace app.Player
             //左ボタン
             if(leftButtonFlag)
             {
-                playerMove(new Vector3(-moveDistance, 0, 0));
+                playerMove(new Vector2(-moveDistance, 0));
             }
 
             //右ボタン
             if(rightButtonFlag)
             {
-                playerMove(new Vector3(moveDistance, 0, 0));
+                playerMove(new Vector2(moveDistance, 0));
             }
 
             //上ボタン
             if(upButtonFlag)
             {
-                playerMove(new Vector3(0, 0, -moveDistance));
+                playerMove(new Vector2(0, -moveDistance));
             }
 
             //下ボタン
             if(downButtonFlag)
             {
-                playerMove(new Vector3(0, 0, moveDistance));
+                playerMove(new Vector2(0, moveDistance));
             }
 
             //目的地との距離を計算
@@ -262,24 +262,27 @@ namespace app.Player
             downButtonFlag = false;
         }
 
-        //移動
-        void playerMove(Vector3 direction)
+        //キャラクターの移動
+        void playerMove(Vector2 direction)
         {
             if(this == null) { return; }
 
-            //移動速度
+            //移動距離
             var length = moveUnitPerSec * Time.deltaTime;
 
-            //カメラの向く方向の指定
+            //カメラの向きを取得
             var cameraForward = cameraController.transform.forward;
 
-            //カメラを指定した方向に向ける
+            //移動先の向きをカメラの向きに対して、directionの向きにする
             var cameraRotation = Quaternion.LookRotation(cameraForward);
-            var directionXZ = direction;
+            var directionXZ = new Vector3(direction.x, 0.0f, direction.y);
             var directionFromCamera = cameraRotation * directionXZ;
+
+            //移動先の向きのy方向を0にしてNormalize
+            directionFromCamera.y = 0.0f;
             directionFromCamera.Normalize();
 
-            //目的地の決定
+            //移動先ベクトルの決定
             moveDestination = directionFromCamera * length;
             moveDestination += transform.localPosition;
         }

@@ -43,7 +43,7 @@ namespace app.GameCamera
             cachedRotation = CachedTransform.localRotation;
         }
 
-        void Update()
+        void FixedUpdate()
         {
             switch (mode)
             {

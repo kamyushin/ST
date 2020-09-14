@@ -28,7 +28,7 @@ namespace app.Player
         [SerializeField]
         float gravityUnitPerSecSquare = -0.098f;
         //重力
-        [SerializeField]Vector3 gravity;
+        Vector3 gravity;
 
         // //地面から離れた時間
         // [SerializeField]float isNotGroundedTime = 0f;
@@ -197,6 +197,7 @@ namespace app.Player
             {
                 //飛ぶ
                 isFlying = true;
+                transform.localPosition += new Vector3(0, moveDistance, 0);
             } else {
                 isFlying = false;
             }

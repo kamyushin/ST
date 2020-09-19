@@ -69,7 +69,6 @@ namespace app.Player
 
         void FixedUpdate()
         {
-
             //真上3秒
             //横移動5秒
             //△攻撃は10分の1くらい減る
@@ -138,10 +137,8 @@ namespace app.Player
             var position = transform.localPosition;
             //目的地までのベクトル
             var difference = moveDestination - position;
-            //XZ軸上の平面上の移動の場合Y成分を消す
 
-            //FIXME ここがこれじゃダメな気がする
-            //移動距離が小さすぎなければ移動
+            //移動スピード
             var speed = 0.0f;
             //目的地までの距離
             var distance = difference.magnitude;

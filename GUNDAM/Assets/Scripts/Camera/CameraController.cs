@@ -11,10 +11,10 @@ namespace app.GameCamera
 
         [SerializeField]
         private new Camera camera;
-
+        //カメラモード
         [System.NonSerialized]
         public Mode mode = Mode.Enemy;
-        
+        //各カメラモードに対するパラメータの設定
         [SerializeField]
         public CameraModeParameter enemyModeParameter;
 
@@ -32,15 +32,8 @@ namespace app.GameCamera
 
         Transform cachedTransform;
 
-        private float cachedFieldOfView = 0.0f;
-        private Vector3 cachedPosition = Vector3.zero;
-        private Quaternion cachedRotation = Quaternion.identity;
-
         void Awake() {
             if (camera == null) { camera = GetComponent<Camera>(); }
-            cachedFieldOfView = enemyModeParameter.fieldOfView;
-            cachedPosition = CachedTransform.localPosition;
-            cachedRotation = CachedTransform.localRotation;
         }
 
         void FixedUpdate()
@@ -53,31 +46,28 @@ namespace app.GameCamera
                     if (enemyModeParameter.targetTransform == null) { return; }
                     if (enemyModeParameter.switcherTransform == null) { return; }
 
-                    //プレイヤーから敵への向きを算出
+                    //敵とプレイヤーの位置
                     var enemyTransform = enemyModeParameter.targetTransform;
                     var playerTransform = enemyModeParameter.switcherTransform;
-                    var direction = enemyTransform.localPosition - playerTransform.localPosition;
-                    direction.y = 0.0f;
+                    //敵のプレイヤーとの距離を計算
+                    var direction = enemyTransform.localPosition - playerTransform.localPosition + enemyModeParameter.targetOffsetPosition;
+                    //距離を元に回転を計算
                     var directionRotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
-                    
+
                     //キャラクターの現在地に、敵への向きにオフセット座標を加算したものを座標に適用
                     var position = playerTransform.localPosition + directionRotation * enemyModeParameter.offsetPosition;
-                    
-				    // キャラクターから敵への向きに、オフセット回転を加算したものを回転に適応
+
+				    //キャラクターから敵への向きに、オフセット回転を加算したものを回転に適応
 				    var rotation = directionRotation * Quaternion.Euler(enemyModeParameter.offsetRotation);
 
+                    //見た目と割合
 				    var fieldOfView = enemyModeParameter.fieldOfView;
 				    var ratio = enemyModeParameter.lerpRatio * Time.deltaTime;
 
-				    // 線形補間
-				    cachedPosition = Vector3.Lerp(cachedPosition, position, ratio);
-				    cachedRotation = Quaternion.Slerp(cachedRotation, rotation, ratio);
-				    cachedFieldOfView = Mathf.Lerp(cachedFieldOfView, fieldOfView, ratio);
-
-				    // 本体に入力
-				    CachedTransform.position = cachedPosition;
-				    CachedTransform.rotation = cachedRotation;
-				    camera.fieldOfView = cachedFieldOfView;
+				    //線形補間
+				    CachedTransform.position = Vector3.Lerp(CachedTransform.position, position, ratio);
+				    CachedTransform.rotation = Quaternion.Slerp(CachedTransform.rotation, rotation, ratio);
+				    camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, fieldOfView, ratio);
                 }
                     break;
                 default:

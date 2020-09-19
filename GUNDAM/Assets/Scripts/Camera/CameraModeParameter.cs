@@ -11,10 +11,12 @@ namespace app.GameCamera
         public Transform targetTransform;
         //モード切替を行ったGameObjectのTransform
         public Transform switcherTransform;
-        //注視点からのオフセット座標
+        //プレイヤーのオフセット位置
         public Vector3 offsetPosition;
-        //注視点からのオフセット回転
+        //プレイヤーのオフセット回転
         public Vector3 offsetRotation;
+        //ターゲットのオフセット位置
+        public Vector3 targetOffsetPosition;
         //カメラの見通し
         public float fieldOfView = 60.0f;
         //座標や回転の補間率

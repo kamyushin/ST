@@ -66,6 +66,8 @@ namespace app.Player
         [SerializeField]bool downButtonFlag = false;
         //飛んでるフラグ
         [SerializeField]bool isFlying = false;
+        
+        [SerializeField]Animator animator;
 
         void FixedUpdate()
         {
@@ -109,27 +111,33 @@ namespace app.Player
                 downButtonFlag = true;
             }
 
+            animator.SetBool("is_walking", false);
+
             //左ボタン
             if(leftButtonFlag)
             {
+                animator.SetBool("is_walking", true);
                 playerMove(new Vector2(-moveDistance, 0));
             }
 
             //右ボタン
             if(rightButtonFlag)
             {
+                animator.SetBool("is_walking", true);
                 playerMove(new Vector2(moveDistance, 0));
             }
 
             //上ボタン
             if(upButtonFlag)
             {
+                animator.SetBool("is_walking", true);
                 playerMove(new Vector2(0, -moveDistance));
             }
 
             //下ボタン
             if(downButtonFlag)
             {
+                animator.SetBool("is_walking", true);
                 playerMove(new Vector2(0, moveDistance));
             }
 
@@ -144,7 +152,7 @@ namespace app.Player
             var distance = difference.magnitude;
 
             //ボタンを押してる場合
-            if(moveButtonFlag())
+            if(moveButtonFlag)
             {
                 //動くスピードを計算
                 if(0.0f != Time.deltaTime) { speed = moveUnitPerSec * Time.deltaTime; }
@@ -242,13 +250,16 @@ namespace app.Player
             }
         }
 
-        bool moveButtonFlag()
+        
+        bool moveButtonFlag
         {
-            if(leftButtonFlag || rightButtonFlag || upButtonFlag || downButtonFlag)
-            {
-                return true;
+            get {
+                if(leftButtonFlag || rightButtonFlag || upButtonFlag || downButtonFlag)
+                {
+                    return true;
+                }
+                return false;
             }
-            return false;
         }
 
         //移動ボタンfalse

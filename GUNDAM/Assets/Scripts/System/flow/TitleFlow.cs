@@ -18,8 +18,11 @@ namespace app
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                FadeManager.Instance.FadeOut(3.0f);
-                //RequestFlowStart(FlowDefine.FlowType.Game);
+                //FadeManager.Instance.FadeOut(3.0f);
+                if (FlowManager.IsInstanceEnable)
+                {
+                    RequestFlowStart(FlowDefine.FlowType.Game);
+                }
                 return FlowState.END;
             }
 

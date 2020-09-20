@@ -15,6 +15,12 @@ namespace app
             Game,
         }
 
+        public enum FlowListType
+        {
+            Title,
+            MainBattle,
+        }
+
         public static Dictionary<FlowType, string[]> LoadSceneNames = new Dictionary<FlowType, string[]>
         {
             { FlowType.Title,new string[]{"Title" } },

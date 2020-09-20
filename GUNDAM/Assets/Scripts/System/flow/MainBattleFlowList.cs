@@ -7,9 +7,8 @@ namespace app
 {
     public class MainBattleFlowList : FlowListBase
     {
-        protected override void SetFlowList()
+        public MainBattleFlowList()
         {
-            FlowList.Add(FlowDefine.FlowType.Title);
             FlowList.Add(FlowDefine.FlowType.Game);
         }
     }

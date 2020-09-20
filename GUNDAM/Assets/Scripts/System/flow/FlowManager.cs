@@ -43,6 +43,7 @@ namespace app
             }
         }
 
+
         #region Behaviour継承
 
         //protected override void doAwake()

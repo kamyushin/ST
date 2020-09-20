@@ -8,31 +8,14 @@ namespace app {
     {
         protected List<FlowDefine.FlowType> FlowList = new List<FlowDefine.FlowType>();
 
-        protected virtual void SetFlowList(){}
-
-        public void StartFlowList()
+        uint CurrentFrowIndex = 0;
+        private void Next()
         {
-        }
-
-        public void OnFlowStart(FlowDefine.FlowType flowType)
-        {
-            switch (flowType)
+            CurrentFrowIndex++;
+            if ( FlowList.Count <= CurrentFrowIndex)
             {
-                case FlowDefine.FlowType.Title:
-                    break;
-                case FlowDefine.FlowType.Game:
-                    break;
+                return;
             }
-        }
-
-        private void OnTitleStart()
-        {
-
-        }
-
-        private void OnGameStart()
-        {
-
         }
     }
 }

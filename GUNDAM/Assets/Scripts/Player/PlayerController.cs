@@ -9,15 +9,29 @@ namespace app.Player
         //飛ぶ距離
         [SerializeField]float flyDistance = 0.15f;
 
-        //リジットボディ
-        [SerializeField]Rigidbody rb;
-        //重力
-        [SerializeField]Vector3 localGravity = new Vector3(0, -9.8f, 0);
-        //接地判定
-        [SerializeField]bool isGrounded;
+        //CameraController
+        [SerializeField]
+        app.GameCamera.CameraController cameraController = null;
 
-        //地面から離れた時間
-        [SerializeField]float isNotGroundedTime = 0f;
+        //CharacterController
+        [SerializeField]
+        CharacterController characterController = null;
+
+        //移動速度(unit/sec)
+        [SerializeField]
+        float moveUnitPerSec = 1.0f;
+        //移動目的地
+        Vector3 moveDestination;
+        //移動方向
+        Quaternion moveDirection;
+        //重力加速度(unit/sec^2)
+        [SerializeField]
+        float gravityUnitPerSecSquare = -0.098f;
+        //重力
+        Vector3 gravity;
+
+        // //地面から離れた時間
+        // [SerializeField]float isNotGroundedTime = 0f;
         //飛行フラグ
         [SerializeField]bool flyFlag = false;
         //飛行必要フレーム
@@ -50,17 +64,13 @@ namespace app.Player
         [SerializeField]bool upButtonFlag = false;
         //下ボタン入力フラグ
         [SerializeField]bool downButtonFlag = false;
-
-        void Start()
-        {
-            rb = GetComponent<Rigidbody>();
-            rb.useGravity = false;
-        }
+        //飛んでるフラグ
+        [SerializeField]bool isFlying = false;
+        
+        [SerializeField]Animator animator;
 
         void FixedUpdate()
         {
-
-            //重力後回し
             //真上3秒
             //横移動5秒
             //△攻撃は10分の1くらい減る
@@ -101,28 +111,83 @@ namespace app.Player
                 downButtonFlag = true;
             }
 
-            //左
+            animator.SetBool("is_walking", false);
+
+            //左ボタン
             if(leftButtonFlag)
             {
-                transform.Translate(-moveDistance, 0, 0);
+                animator.SetBool("is_walking", true);
+                playerMove(new Vector2(-moveDistance, 0));
             }
 
-            //右
+            //右ボタン
             if(rightButtonFlag)
             {
-                transform.Translate(moveDistance, 0, 0);
+                animator.SetBool("is_walking", true);
+                playerMove(new Vector2(moveDistance, 0));
             }
 
-            //上
+            //上ボタン
             if(upButtonFlag)
             {
-                transform.Translate(0, 0, moveDistance);
+                animator.SetBool("is_walking", true);
+                playerMove(new Vector2(0, -moveDistance));
             }
 
-            //下
+            //下ボタン
             if(downButtonFlag)
             {
-                transform.Translate(0, 0, -moveDistance);
+                animator.SetBool("is_walking", true);
+                playerMove(new Vector2(0, moveDistance));
+            }
+
+            //目的地との距離を計算
+            var position = transform.localPosition;
+            //目的地までのベクトル
+            var difference = moveDestination - position;
+
+            //移動スピード
+            var speed = 0.0f;
+            //目的地までの距離
+            var distance = difference.magnitude;
+
+            //ボタンを押してる場合
+            if(moveButtonFlag)
+            {
+                //動くスピードを計算
+                if(0.0f != Time.deltaTime) { speed = moveUnitPerSec * Time.deltaTime; }
+                speed = speed < distance ? speed : distance;
+
+                //計算した後、向きのためにNormalize
+                difference.Normalize();
+                //向きの決定
+                moveDirection = Quaternion.LookRotation(difference);
+            }
+
+            //キャラクターの回転
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, moveDirection, 5.0f * Time.deltaTime);
+
+            //キャラクターの移動(目的地までのベクトル * スピード + 重力ベクトル)
+            var moveDifference = difference * speed + gravity;
+            characterController.Move(moveDifference);
+
+            //Rayを飛ばしての接地判定
+            const float rayDistance = 1.2f;
+            var rayPosition = transform.localPosition + new Vector3(0.0f, 0.1f, 0.0f);
+            var rayLayerMask = LayerMask.GetMask("Ground");
+            var ray = new Ray(rayPosition, Vector3.down);
+            var isGrounded = Physics.Raycast(ray, rayDistance, rayLayerMask);
+
+            //接地してる or 飛んでる
+            if(isGrounded || isFlying)
+            {
+                //重力を0に
+                gravity.y = 0.0f;
+            }
+            else
+            {
+                //重力を足していく
+                gravity.y += gravityUnitPerSecSquare * Time.deltaTime;
             }
 
             //○ボタン
@@ -135,31 +200,11 @@ namespace app.Player
             //×ボタン
             if(Input.GetButton("×"))
             {
-                if(flyGraceFrame < flyNeedFrame)
-                {
-                    flyGraceFrame++;
-                }
-                else
-                {
-                    flyFlag = true;
-                }
-            }
-            else
-            {
-                flyGraceFrame = 0;
-                flyFlag = false;
-            }
-
-            //地面にいない && 飛んでない
-            if(!isGrounded && !flyFlag)
-            {
-                transform.Translate(0, -flyDistance, 0);
-            }
-
-            //飛んでる
-            if(flyFlag)
-            {
-                transform.Translate(0, flyDistance, 0);
+                //飛ぶ
+                isFlying = true;
+                transform.localPosition += new Vector3(0, moveDistance, 0);
+            } else {
+                isFlying = false;
             }
 
             //△ボタン
@@ -205,6 +250,18 @@ namespace app.Player
             }
         }
 
+        
+        bool moveButtonFlag
+        {
+            get {
+                if(leftButtonFlag || rightButtonFlag || upButtonFlag || downButtonFlag)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
         //移動ボタンfalse
         void changeMoveButtonFalse()
         {
@@ -214,23 +271,29 @@ namespace app.Player
             downButtonFlag = false;
         }
 
-        //地面に触れた時
-        void OnCollisionEnter(Collision other)
+        //キャラクターの移動
+        void playerMove(Vector2 direction)
         {
-            if (other.gameObject.tag == "Ground")
-            {
-                isGrounded = true;
-                isNotGroundedTime = 0f;
-            }
-        }
+            if(this == null) { return; }
 
-        void OnCollisionExit(Collision other)
-        {
-            if (other.gameObject.tag == "Ground")
-            {
-                isGrounded = false;
-                isNotGroundedTime = 0f;
-            }
+            //移動距離
+            var length = moveUnitPerSec * Time.deltaTime;
+
+            //カメラの向きを取得
+            var cameraForward = cameraController.transform.forward;
+
+            //移動先の向きをカメラの向きに対して、directionの向きにする
+            var cameraRotation = Quaternion.LookRotation(cameraForward);
+            var directionXZ = new Vector3(direction.x, 0.0f, direction.y);
+            var directionFromCamera = cameraRotation * directionXZ;
+
+            //移動先の向きのy方向を0にしてNormalize
+            directionFromCamera.y = 0.0f;
+            directionFromCamera.Normalize();
+
+            //移動先ベクトルの決定
+            moveDestination = directionFromCamera * length;
+            moveDestination += transform.localPosition;
         }
     }
 }

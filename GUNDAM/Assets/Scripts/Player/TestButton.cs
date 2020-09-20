@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Player {
+namespace app.Player 
+{
     public class TestButton : MonoBehaviour
     {
         // Start is called before the first frame update

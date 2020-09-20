@@ -4,10 +4,10 @@ namespace app.Player
 {
     public class PlayerController : MonoBehaviour
     {
-        //移動距離
-        [SerializeField]float moveDistance = 0.1f;
-        //飛ぶ距離
-        [SerializeField]float flyDistance = 0.15f;
+        //移動スピード
+        [SerializeField]float moveSpeed = 0.3f;
+        //飛ぶスピード
+        [SerializeField]float flySpeed = 0.1f;
 
         //CameraController
         [SerializeField]
@@ -84,6 +84,8 @@ namespace app.Player
             //移動押しっぱで離して直ぐ押してもダッシュする
             //何かブーストを使う系の物は、最初に少しだけ多めに消費する(△攻撃の最初のダッシュだけ例外)
 
+            //FIXME 高く飛ぶとカメラひっくり返る
+
             //ボタンfalseフラグ
             changeMoveButtonFalse();
 
@@ -113,32 +115,36 @@ namespace app.Player
 
             animator.SetBool("is_walking", false);
 
+            //移動距離
+            var moveVector = new Vector2(0, 0);
+
             //左ボタン
             if(leftButtonFlag)
             {
-                animator.SetBool("is_walking", true);
-                playerMove(new Vector2(-moveDistance, 0));
+                moveVector.x -= moveSpeed;
             }
 
             //右ボタン
             if(rightButtonFlag)
             {
-                animator.SetBool("is_walking", true);
-                playerMove(new Vector2(moveDistance, 0));
+                moveVector.x += moveSpeed;
             }
 
             //上ボタン
             if(upButtonFlag)
             {
-                animator.SetBool("is_walking", true);
-                playerMove(new Vector2(0, -moveDistance));
+                moveVector.y -= moveSpeed;
             }
 
             //下ボタン
             if(downButtonFlag)
             {
+                moveVector.y += moveSpeed;
+            }
+
+            if(moveButtonFlag) {
                 animator.SetBool("is_walking", true);
-                playerMove(new Vector2(0, moveDistance));
+                playerMove(moveVector);
             }
 
             //目的地との距離を計算
@@ -171,15 +177,8 @@ namespace app.Player
             var moveDifference = difference * speed + gravity;
             characterController.Move(moveDifference);
 
-            //Rayを飛ばしての接地判定
-            const float rayDistance = 1.2f;
-            var rayPosition = transform.localPosition + new Vector3(0.0f, 0.1f, 0.0f);
-            var rayLayerMask = LayerMask.GetMask("Ground");
-            var ray = new Ray(rayPosition, Vector3.down);
-            var isGrounded = Physics.Raycast(ray, rayDistance, rayLayerMask);
-
             //接地してる or 飛んでる
-            if(isGrounded || isFlying)
+            if(characterController.isGrounded || isFlying)
             {
                 //重力を0に
                 gravity.y = 0.0f;
@@ -196,13 +195,12 @@ namespace app.Player
                 Debug.Log("ChangeTarget or Submit");
             }
 
-
             //×ボタン
             if(Input.GetButton("×"))
             {
                 //飛ぶ
                 isFlying = true;
-                transform.localPosition += new Vector3(0, moveDistance, 0);
+                transform.localPosition += new Vector3(0, flySpeed, 0);
             } else {
                 isFlying = false;
             }

@@ -253,8 +253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30a2a98621a7d43b58dd4dfaf0c7d611, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDistance: 0.1
-  flyDistance: 0.15
+  moveSpeed: 0.3
+  flySpeed: 0.1
   cameraController: {fileID: 963194229}
   characterController: {fileID: 423058273}
   moveUnitPerSec: 3
@@ -740,7 +740,7 @@ GameObject:
   - component: {fileID: 1391605798}
   - component: {fileID: 1391605797}
   m_Layer: 5
-  m_Name: Text
+  m_Name: BoostText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -933,8 +933,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30a2a98621a7d43b58dd4dfaf0c7d611, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDistance: 0.2
-  flyDistance: 0.15
+  moveSpeed: 0.3
+  flySpeed: 0.1
   cameraController: {fileID: 963194229}
   characterController: {fileID: 1908866960}
   moveUnitPerSec: 1

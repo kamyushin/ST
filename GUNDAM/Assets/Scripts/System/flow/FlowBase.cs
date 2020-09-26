@@ -77,6 +77,8 @@ namespace app
         protected virtual FlowDefine.FlowType FlowType { get; set; }
         private List<FlowDefine.FlowType> RequestFlowTypes = new List<FlowDefine.FlowType>();
         private bool EndFlow = false;
+        private bool FadeInStart = false;
+        private bool FadeOutStart = false;
 
         private void Awake()
         {
@@ -90,8 +92,30 @@ namespace app
             Phase.Setup();
         }
 
+        private void Start()
+        {
+            if (FadeManager.IsInstanceEnable)
+            {
+                if (!FadeManager.Instance.IsFading)
+                {
+                    FadeManager.Instance.FadeIn();
+                    FadeInStart = true;
+                }
+            }
+        }
+
         private void Update()
         {
+            if (FadeInStart)
+            {
+                if (FadeManager.IsInstanceEnable)
+                {
+                    if (FadeManager.Instance.IsFading) return;
+                }
+
+                FadeInStart = false;
+            }
+
             if (!EndFlow)
             {
                 var flowState = Phase.Update();
@@ -113,6 +137,25 @@ namespace app
         {
             if (EndFlow)
             {
+                if (!FadeOutStart)
+                {
+                    if (FadeManager.IsInstanceEnable)
+                    {
+                        if (!FadeManager.Instance.IsFading)
+                        {
+                            FadeManager.Instance.FadeOut();
+                            FadeOutStart = true;
+                        }
+                    }
+                }
+                
+                if (FadeManager.IsInstanceEnable)
+                {
+                    if (FadeManager.Instance.IsFading) return;
+                }
+
+                FadeOutStart = false;
+
                 if (FlowManager.IsInstanceEnable)
                 {
                     FlowManager.Instance.RequestUnload(FlowType);

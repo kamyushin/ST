@@ -1,7 +1,4 @@
-﻿using app.Battle;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,27 +13,35 @@ namespace app
 
         private float AlphaRate = 0;
 
-        public void FadeIn(float time)
-        {
-            if ( FadeUIImage != null)
-            { 
-                FadeUIImage.CrossFadeAlpha(0, time, true);
-            }
-        }
-        public void FadeOut(float time)
+        public float FadeTimer { get; private set; }
+        public bool IsFading { get; private set; }
+
+        public void FadeIn(float time = 1.0f)
         {
             if (FadeUIImage != null)
             {
-                FadeUIImage.CrossFadeAlpha(1, time, true);
+                IsFading = true;
+                FadeUIImage.CrossFadeAlpha(0, time, true);
+                FadeTimer = time;
             }
         }
+        public void FadeOut(float time = 1.0f)
+        {
+            if (FadeUIImage != null)
+            {
+                IsFading = true;
+                FadeUIImage.CrossFadeAlpha(1, time, true);
+                FadeTimer = time;
+            }
+        }
+
         #region Behaviour継承
 
         protected override void doStart()
         {
             if (FadeUI != null)
             {
-                FadeUIImage =  FadeUI.GetComponent<Image>();
+                FadeUIImage = FadeUI.GetComponent<Image>();
                 FadeUIImage.CrossFadeAlpha(0, 0, true);
             }
         }
@@ -48,7 +53,18 @@ namespace app
 
         protected override void doUpdate()
         {
+            if(IsFading)
+            {
+                if ( FadeTimer > 0)
+                {
+                    FadeTimer -= Time.deltaTime;
+                }
 
+                if ( FadeTimer <= 0)
+                {
+                    IsFading = false;
+                }
+            }
         }
 
         #endregion

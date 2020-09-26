@@ -20,6 +20,7 @@ namespace app
             }
         }
         
+
         private FlowState UpdateGame()
         {
             if (BattleManager.IsInstanceEnable)

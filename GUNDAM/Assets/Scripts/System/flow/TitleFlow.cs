@@ -16,9 +16,8 @@ namespace app
 
         private FlowState UpdateTitle()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.anyKeyDown)
             {
-                //FadeManager.Instance.FadeOut(3.0f);
                 if (FlowManager.IsInstanceEnable)
                 {
                     RequestFlowStart(FlowDefine.FlowType.Game);

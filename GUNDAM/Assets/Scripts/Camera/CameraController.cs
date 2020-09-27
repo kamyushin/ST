@@ -2,6 +2,7 @@
 
 namespace app.GameCamera
 {
+    [DefaultExecutionOrder((int)ExecutionOrder.CAMERA)]
     public class CameraController : MonoBehaviour
     {
 
@@ -43,12 +44,32 @@ namespace app.GameCamera
                 case Mode.Enemy:
                 {
                     if (CachedTransform == null) { return; }
-                    if (enemyModeParameter.targetTransform == null) { return; }
-                    if (enemyModeParameter.switcherTransform == null) { return; }
+
+                    //ターゲットのTransformを取得
+                    if (enemyModeParameter.targetTransform == null)
+                    {
+                        var enemy = GameObject.FindWithTag("Enemy");
+                        if(!enemy)
+                        {
+                            return;
+                        }
+                        enemyModeParameter.targetTransform = enemy.transform;
+                    }
+
+                    //プレイヤーのTransformを取得
+                    if (enemyModeParameter.playerTransform == null)
+                    {
+                        var player = GameObject.FindWithTag("Player");
+                        if(!player)
+                        {
+                            return;
+                        }
+                        enemyModeParameter.playerTransform = player.transform;
+                    }
 
                     //敵とプレイヤーの位置
                     var enemyTransform = enemyModeParameter.targetTransform;
-                    var playerTransform = enemyModeParameter.switcherTransform;
+                    var playerTransform = enemyModeParameter.playerTransform;
                     //敵のプレイヤーとの距離を計算
                     var direction = enemyTransform.localPosition - playerTransform.localPosition + enemyModeParameter.targetOffsetPosition;
                     //距離を元に回転を計算

@@ -8,6 +8,9 @@ namespace app
     {
         SYSTEM,
         DEFAULT = 100,
+        INPUT,
+        PLAYER,
+        CAMERA,
         POST,
     }
 }

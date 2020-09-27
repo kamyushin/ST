@@ -1195,9 +1195,10 @@ GameObject:
   - component: {fileID: 6184735802855467509}
   - component: {fileID: 8254846856310459265}
   - component: {fileID: 8254846856310459264}
+  - component: {fileID: 4129973514245716327}
   m_Layer: 0
   m_Name: Fighter001
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1272,6 +1273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30a2a98621a7d43b58dd4dfaf0c7d611, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputController: {fileID: 4129973514245716327}
   moveSpeed: 0.3
   flySpeed: 0.1
   cameraController: {fileID: 0}
@@ -1291,6 +1293,19 @@ MonoBehaviour:
   downButtonFlag: 0
   isFlying: 0
   animator: {fileID: 6184735802855467509}
+--- !u!114 &4129973514245716327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6184735802457180752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a290f6198c00c476c843c04d5d935d94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 8254846856310459264}
 --- !u!1 &6184735802457180754
 GameObject:
   m_ObjectHideFlags: 0

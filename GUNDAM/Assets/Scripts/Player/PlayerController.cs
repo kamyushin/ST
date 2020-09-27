@@ -2,15 +2,16 @@
 
 namespace app.Player 
 {
+    [DefaultExecutionOrder((int)ExecutionOrder.PLAYER)]
     public class PlayerController : MonoBehaviour
     {
+        InputController inputController;
         //移動スピード
         [SerializeField]float moveSpeed = 0.3f;
         //飛ぶスピード
         [SerializeField]float flySpeed = 0.1f;
 
         //CameraController
-        [SerializeField]
         app.GameCamera.CameraController cameraController = null;
 
         //CharacterController
@@ -56,18 +57,16 @@ namespace app.Player
         //ブーストメーター
         [SerializeField]float boostMeter = 60.0f;
 
-        //左ボタン入力フラグ
-        [SerializeField]bool leftButtonFlag = false;
-        //右ボタン入力フラグ
-        [SerializeField]bool rightButtonFlag = false;
-        //上ボタン入力フラグ
-        [SerializeField]bool upButtonFlag = false;
-        //下ボタン入力フラグ
-        [SerializeField]bool downButtonFlag = false;
         //飛んでるフラグ
         [SerializeField]bool isFlying = false;
         
         [SerializeField]Animator animator;
+
+        void Start()
+        {
+            inputController = GameObject.Find("InputController").GetComponent<InputController>();
+            cameraController = GameObject.FindWithTag("MainCamera").GetComponent<GameCamera.CameraController>();
+        }
 
         void FixedUpdate()
         {
@@ -84,98 +83,10 @@ namespace app.Player
             //移動押しっぱで離して直ぐ押してもダッシュする
             //何かブーストを使う系の物は、最初に少しだけ多めに消費する(△攻撃の最初のダッシュだけ例外)
 
-            //FIXME 高く飛ぶとカメラひっくり返る
-
-            //ボタンfalseフラグ
-            changeMoveButtonFalse();
-
-            //左系ボタン入力
-            if(Input.GetAxis("Axis 1") < 0 || Input.GetAxis("Axis 7") < 0 || Input.GetAxis("Horizontal") < 0)
-            {
-                leftButtonFlag = true;
-            }
-
-            //右系ボタン入力
-            if(Input.GetAxis("Axis 1") > 0 || Input.GetAxis("Axis 7") > 0 || Input.GetAxis("Horizontal") > 0)
-            {
-                rightButtonFlag = true;
-            }
-
-            //上系ボタン入力
-            if(Input.GetAxis("Axis 2") < 0 || Input.GetAxis("Axis 8") < 0 || Input.GetAxis("Vertical") < 0)
-            {
-                upButtonFlag = true;
-            }
-
-            //下系ボタン入力
-            if(Input.GetAxis("Axis 2") > 0 || Input.GetAxis("Axis 8") > 0 || Input.GetAxis("Vertical") > 0)
-            {
-                downButtonFlag = true;
-            }
-
             animator.SetBool("is_walking", false);
 
-            //移動距離
-            var moveVector = new Vector2(0, 0);
-
-            //左ボタン
-            if(leftButtonFlag)
-            {
-                moveVector.x -= moveSpeed;
-            }
-
-            //右ボタン
-            if(rightButtonFlag)
-            {
-                moveVector.x += moveSpeed;
-            }
-
-            //上ボタン
-            if(upButtonFlag)
-            {
-                moveVector.y -= moveSpeed;
-            }
-
-            //下ボタン
-            if(downButtonFlag)
-            {
-                moveVector.y += moveSpeed;
-            }
-
-            if(moveButtonFlag) {
-                animator.SetBool("is_walking", true);
-                playerMove(moveVector);
-            }
-
-            //目的地との距離を計算
-            var position = transform.localPosition;
-            //目的地までのベクトル
-            var difference = moveDestination - position;
-
-            //移動スピード
-            var speed = 0.0f;
-            //目的地までの距離
-            var distance = difference.magnitude;
-
-            //ボタンを押してる場合
-            if(moveButtonFlag)
-            {
-                //動くスピードを計算
-                if(0.0f != Time.deltaTime) { speed = moveUnitPerSec * Time.deltaTime; }
-                speed = speed < distance ? speed : distance;
-
-                //計算した後、向きのためにNormalize
-                difference.Normalize();
-                //向きの決定
-                moveDirection = Quaternion.LookRotation(difference);
-            }
-
-            //キャラクターの回転
-            transform.localRotation = Quaternion.Lerp(transform.localRotation, moveDirection, 5.0f * Time.deltaTime);
-
-            //キャラクターの移動(目的地までのベクトル * スピード + 重力ベクトル)
-            var moveDifference = difference * speed + gravity;
-            characterController.Move(moveDifference);
+            //キャラクターの移動
+            playerMove();
 
             //接地してる or 飛んでる
             if(characterController.isGrounded || isFlying)
@@ -189,14 +100,8 @@ namespace app.Player
                 gravity.y += gravityUnitPerSecSquare * Time.deltaTime;
             }
 
-            //○ボタン
-            if(Input.GetButtonDown("○"))
-            {
-                Debug.Log("ChangeTarget or Submit");
-            }
-
             //×ボタン
-            if(Input.GetButton("×"))
+            if(inputController.cross)
             {
                 //飛ぶ
                 isFlying = true;
@@ -204,75 +109,41 @@ namespace app.Player
             } else {
                 isFlying = false;
             }
-
-            //△ボタン
-            if(Input.GetButtonDown("△"))
-            {
-                Debug.Log("Attack");
-            }
-
-            //□ボタン
-            if(Input.GetButtonDown("□"))
-            {
-                Debug.Log("Shoot");
-            }
-
-            //R1ボタン
-            if(Input.GetButtonDown("R1"))
-            {
-                Debug.Log("SubShoot");
-            }
-
-            //R2ボタン
-            if(Input.GetButtonDown("R2"))
-            {
-                Debug.Log("SpecialAttack");
-            }
-
-            //L1ボタン
-            if(Input.GetButtonDown("L1"))
-            {
-                Debug.Log("Communication");
-            }
-
-            //L2ボタン
-            if(Input.GetButtonDown("L2"))
-            {
-                Debug.Log("SpecialShoot");
-            }
-
-            //R3ボタン
-            if(Input.GetButtonDown("R3"))
-            {
-                Debug.Log("EXBurst");
-            }
-        }
-
-        
-        bool moveButtonFlag
-        {
-            get {
-                if(leftButtonFlag || rightButtonFlag || upButtonFlag || downButtonFlag)
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
-
-        //移動ボタンfalse
-        void changeMoveButtonFalse()
-        {
-            leftButtonFlag = false;
-            rightButtonFlag = false;
-            upButtonFlag = false;
-            downButtonFlag = false;
         }
 
         //キャラクターの移動
-        void playerMove(Vector2 direction)
+        void playerMove()
         {
-            if(this == null) { return; }
+            //移動距離
+            var moveVector = new Vector2(0, 0);
+
+            //左ボタン
+            if(inputController.left)
+            {
+                animator.SetBool("is_walking", true);
+                moveVector.x -= moveSpeed;
+            }
+
+            //右ボタン
+            if(inputController.right)
+            {
+                animator.SetBool("is_walking", true);
+                moveVector.x += moveSpeed;
+            }
+
+            //上ボタン
+            if(inputController.up)
+            {
+                animator.SetBool("is_walking", true);
+                moveVector.y -= moveSpeed;
+            }
+
+            //下ボタン
+            if(inputController.down)
+            {
+                animator.SetBool("is_walking", true);
+                moveVector.y += moveSpeed;
+            }
 
             //移動距離
             var length = moveUnitPerSec * Time.deltaTime;
@@ -282,7 +153,7 @@ namespace app.Player
 
             //移動先の向きをカメラの向きに対して、directionの向きにする
             var cameraRotation = Quaternion.LookRotation(cameraForward);
-            var directionXZ = new Vector3(direction.x, 0.0f, direction.y);
+            var directionXZ = new Vector3(moveVector.x, 0.0f, moveVector.y);
             var directionFromCamera = cameraRotation * directionXZ;
 
             //移動先の向きのy方向を0にしてNormalize
@@ -292,6 +163,35 @@ namespace app.Player
             //移動先ベクトルの決定
             moveDestination = directionFromCamera * length;
             moveDestination += transform.localPosition;
+
+            //目的地との距離を計算
+            var position = transform.localPosition;
+            //目的地までのベクトル
+            var difference = moveDestination - position;
+
+            //移動スピード
+            var speed = 0.0f;
+            //目的地までの距離
+            var distance = difference.magnitude;
+
+            //動くスピードを計算
+            if(0.0f != Time.deltaTime) { speed = moveUnitPerSec * Time.deltaTime; }
+            speed = speed < distance ? speed : distance;
+
+            //計算した後、向きのためにNormalize
+            difference.Normalize();
+            if(difference.magnitude != 0)
+            {
+                //向きの決定
+                moveDirection = Quaternion.LookRotation(difference);
+            }
+
+            //キャラクターの回転
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, moveDirection, 5.0f * Time.deltaTime);
+
+            //キャラクターの移動(目的地までのベクトル * スピード + 重力ベクトル)
+            var moveDifference = difference * speed + gravity;
+            characterController.Move(moveDifference);
         }
     }
 }

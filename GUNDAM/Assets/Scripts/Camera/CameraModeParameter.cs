@@ -8,9 +8,11 @@ namespace app.GameCamera
         //モード
         public CameraController.Mode mode;
         //注視点
-        public Transform targetTransform;
+        [System.NonSerialized]
+       public Transform targetTransform;
         //モード切替を行ったGameObjectのTransform
-        public Transform switcherTransform;
+        [System.NonSerialized]
+        public Transform playerTransform;
         //プレイヤーのオフセット位置
         public Vector3 offsetPosition;
         //プレイヤーのオフセット回転

@@ -56,6 +56,7 @@ namespace app
                     {
                         CurrentPhase.Start();
                     }
+                    CurrentPhase.IsInit = false;
                 }
 
                 return CurrentPhase.Update();

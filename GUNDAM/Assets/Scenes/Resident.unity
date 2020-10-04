@@ -305,6 +305,7 @@ GameObject:
   - component: {fileID: 1902193008}
   - component: {fileID: 1902193010}
   - component: {fileID: 1902193009}
+  - component: {fileID: 1902193011}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -351,3 +352,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1c2217e754e576448bb57efb6653805, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1902193011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902193007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b5fc7b983411464caa26e5b608e4352, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Canvas: {fileID: 1272443198}
+  UIObjList:
+  - Name: Title
+    Obj: {fileID: 8862426034599550001, guid: 1ecdf38f2b80e144784b606c4fd1a7f9, type: 3}

@@ -6,16 +6,26 @@ namespace app.UI
 {
     public class UIFlowTitle : UIFlowBase
     {
-        private float DecideTimer = 3.0f;
+        private float DecideTimer = 1.0f;
         private bool IsDecide = false;
 
-        //TODO Endが強要できない。
-        public static bool End { get; protected set; } = false;
+        public static  string UIName = "Title";
+
+        public static UIHandle StartFlow()
+        {
+            if (UIFlowManager.IsInstanceEnable)
+            {
+                var handle = UIFlowManager.Instance.StartFlow(UIName);
+                return handle;
+            }
+
+            return null;
+        }
 
         // Update is called once per frame
         void Update()
         {
-            if (End) return;
+            if (Handle == null || Handle.End) return;
 
             if (!IsDecide)
             {
@@ -30,9 +40,11 @@ namespace app.UI
                 DecideTimer -= Time.deltaTime;
                 if (DecideTimer <= 0)
                 {
-                    End = true;
+                    Handle.End = true;
                 }
             }
+
+            if (Handle.End) Destroy(this.gameObject);
 
         }
     }

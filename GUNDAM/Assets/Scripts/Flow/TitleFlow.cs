@@ -8,16 +8,23 @@ namespace app
     public class TitleFlow : FlowBase
     {
         protected override FlowDefine.FlowType FlowType { get { return FlowDefine.FlowType.Title; } }
+
+        private UIHandle TitleHandle = null;
         protected override void RegistPhase()
         {
             base.RegistPhase();
 
-            Phase.RegistPhase(UpdateTitle);
+            Phase.RegistPhase(UpdateTitle,StartTitle);
+        }
+
+        private void StartTitle()
+        {
+            TitleHandle = UIFlowTitle.StartFlow();
         }
 
         private FlowState UpdateTitle()
         {
-            if (UIFlowTitle.End)
+            if (TitleHandle.End)
             {
                 if (FlowManager.IsInstanceEnable)
                 {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using app.UI;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ namespace app
 
         private FlowState UpdateTitle()
         {
-            if (Input.anyKeyDown)
+            if (UIFlowTitle.End)
             {
                 if (FlowManager.IsInstanceEnable)
                 {

@@ -8,6 +8,7 @@ namespace app.Battle
     {
         public static Setting Setting = null;
         public static Timer Timer = null;
+        public static Team Team = null;
     }
 
     public class Setting
@@ -16,6 +17,11 @@ namespace app.Battle
     }
 
     public class Timer
+    {
+
+    }
+
+    public class Team
     {
 
     }

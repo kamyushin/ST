@@ -95,11 +95,11 @@ namespace app
 
         private void Start()
         {
-            if (FadeManager.IsInstanceEnable)
+            if (UI.FadeManager.IsInstanceEnable)
             {
-                if (!FadeManager.Instance.IsFading)
+                if (!UI.FadeManager.Instance.IsFading)
                 {
-                    FadeManager.Instance.FadeIn();
+                    UI.FadeManager.Instance.FadeIn();
                     FadeInStart = true;
                 }
             }
@@ -109,9 +109,9 @@ namespace app
         {
             if (FadeInStart)
             {
-                if (FadeManager.IsInstanceEnable)
+                if (UI.FadeManager.IsInstanceEnable)
                 {
-                    if (FadeManager.Instance.IsFading) return;
+                    if (UI.FadeManager.Instance.IsFading) return;
                 }
 
                 FadeInStart = false;
@@ -140,19 +140,19 @@ namespace app
             {
                 if (!FadeOutStart)
                 {
-                    if (FadeManager.IsInstanceEnable)
+                    if (UI.FadeManager.IsInstanceEnable)
                     {
-                        if (!FadeManager.Instance.IsFading)
+                        if (!UI.FadeManager.Instance.IsFading)
                         {
-                            FadeManager.Instance.FadeOut();
+                            UI.FadeManager.Instance.FadeOut();
                             FadeOutStart = true;
                         }
                     }
                 }
                 
-                if (FadeManager.IsInstanceEnable)
+                if (UI.FadeManager.IsInstanceEnable)
                 {
-                    if (FadeManager.Instance.IsFading) return;
+                    if (UI.FadeManager.Instance.IsFading) return;
                 }
 
                 FadeOutStart = false;

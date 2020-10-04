@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d015a0c6cdedc448a6fd73e3ae6bdee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharaDataListSo: {fileID: 11400000, guid: 34b531136897e674abb5664d17c0f603, type: 2}
+  CharaDataListSo: {fileID: 11400000, guid: a8bfe2c28ad5f21409fda008a32f6a9b, type: 2}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,8 +468,6 @@ MonoBehaviour:
   camera: {fileID: 963194227}
   enemyModeParameter:
     mode: 0
-    targetTransform: {fileID: 1129738745}
-    switcherTransform: {fileID: 2836004474021618273}
     offsetPosition: {x: 0, y: 3, z: -5}
     offsetRotation: {x: 20, y: 0, z: 0}
     targetOffsetPosition: {x: 0, y: -0.1, z: 0}
@@ -915,12 +913,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &2836004474021618273 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6184735802457478768, guid: b5d4e38e226c69d44930d148a64037e8,
-    type: 3}
-  m_PrefabInstance: {fileID: 8254846855484306449}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8254846855484306449
 PrefabInstance:
   m_ObjectHideFlags: 0

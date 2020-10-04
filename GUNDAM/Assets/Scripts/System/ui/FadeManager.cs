@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace app
+namespace app.UI
 {
     [DefaultExecutionOrder((int)ExecutionOrder.SYSTEM)]
     public class FadeManager : SingletonBehaviour<FadeManager>

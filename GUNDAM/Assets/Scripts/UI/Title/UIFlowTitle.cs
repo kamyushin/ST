@@ -6,10 +6,9 @@ namespace app.UI
 {
     public class UIFlowTitle : UIFlowBase
     {
-        private float DecideTimer = 1.0f;
-        private bool IsDecide = false;
-
         public static  string UIName = "Title";
+
+        public static bool IsDecide = false;
 
         public static UIHandle StartFlow()
         {
@@ -22,30 +21,27 @@ namespace app.UI
             return null;
         }
 
+        public static void DestroyFlow()
+        {
+            
+        }
+
         // Update is called once per frame
         void Update()
         {
-            if (Handle == null || Handle.End) return;
+            if (Handle == null) return;
 
-            if (!IsDecide)
+            
+            if (Input.anyKeyDown)
             {
-                if (Input.anyKeyDown)
-                {
-                    Controller.SetState("Decide");
-                    IsDecide = true;
-                }
-            }
-            else
-            {
-                DecideTimer -= Time.deltaTime;
-                if (DecideTimer <= 0)
-                {
-                    Handle.End = true;
-                }
+                Controller.SetState("Decide");
+                IsDecide = true;
             }
 
-            if (Handle.End) Destroy(this.gameObject);
-
+            if (Handle.End)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

@@ -10,27 +10,40 @@ namespace app
         protected override FlowDefine.FlowType FlowType { get { return FlowDefine.FlowType.Title; } }
 
         private UIHandle TitleHandle = null;
+        private float DecideTimer = 1.0f;
+
         protected override void RegistPhase()
         {
             base.RegistPhase();
 
-            Phase.RegistPhase(UpdateTitle,StartTitle);
+            OnFlowStart += StartFlow;
+            OnFlowEnd += EndFlow;
+
+            Phase.RegistPhase(UpdateTitle);
         }
 
-        private void StartTitle()
+        private void StartFlow()
         {
             TitleHandle = UIFlowTitle.StartFlow();
+        }
+        private void EndFlow()
+        {
+            TitleHandle.End = true;
         }
 
         private FlowState UpdateTitle()
         {
-            if (TitleHandle.End)
+            if (UIFlowTitle.IsDecide)
             {
-                if (FlowManager.IsInstanceEnable)
+                DecideTimer -= Time.deltaTime;
+                if (DecideTimer <= 0)
                 {
-                    RequestFlowStart(FlowDefine.FlowType.Game);
+                    if (FlowManager.IsInstanceEnable)
+                    {
+                        RequestFlowStart(FlowDefine.FlowType.Game);
+                    }
+                    return FlowState.END;
                 }
-                return FlowState.END;
             }
 
             return FlowState.CONTINUE;

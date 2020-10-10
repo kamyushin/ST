@@ -20,7 +20,7 @@ namespace app
         {
             if (FlowManager.IsInstanceEnable)
             {
-                FlowManager.Instance.RequestLoad(FlowDefine.FlowType.Title);
+                FlowManager.Instance.RequestFlowMap(FlowDefine.FlowMapType.Title);
                 SceneManager.UnloadSceneAsync(FlowDefine.BootSceneName);
                 Resources.UnloadUnusedAssets();
             }

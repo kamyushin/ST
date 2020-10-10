@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace app {
+namespace app 
+{
     public class FlowListBase
     {
         protected List<FlowDefine.FlowType> FlowList = new List<FlowDefine.FlowType>();

@@ -7,7 +7,18 @@ namespace app
 {
     public class FlowManager : SingletonBehaviour<FlowManager>
     {
-        private FlowListBase CurrentFlowList = null;
+        public FlowMap FlowMap { get; private set; } = null;
+
+        public void RequestFlowMap(FlowDefine.FlowMapType type)
+        {
+            switch (type)
+            {
+                case FlowDefine.FlowMapType.Title:
+                    FlowMap = new TitleFlowMap();
+                    FlowMap.StartFlowMap();
+                    break;
+            }
+        }
 
         public void RequestLoad(FlowDefine.FlowType type)
         {
@@ -18,18 +29,6 @@ namespace app
             {
                 RequestLoad(sceneName);
             }
-        }
-
-        public void RequestLoad(string sceneName)
-        {
-            var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            operation.allowSceneActivation = true;
-        }
-
-        public void RequestUnload(string sceneName)
-        {
-            SceneManager.UnloadSceneAsync(sceneName);
-            Resources.UnloadUnusedAssets();
         }
 
         public void RequestUnload(FlowDefine.FlowType type)
@@ -43,6 +42,19 @@ namespace app
             }
         }
 
+        #region　非公開メソッド
+        private void RequestLoad(string sceneName)
+        {
+            var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            operation.allowSceneActivation = true;
+        }
+
+        private void RequestUnload(string sceneName)
+        {
+            SceneManager.UnloadSceneAsync(sceneName);
+            Resources.UnloadUnusedAssets();
+        }
+        #endregion
 
         #region Behaviour継承
 

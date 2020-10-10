@@ -15,7 +15,7 @@ namespace app
             Game,
         }
 
-        public enum FlowListType
+        public enum FlowMapType
         {
             Title,
             MainBattle,

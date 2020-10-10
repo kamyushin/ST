@@ -16,7 +16,7 @@ namespace app.UI
         public float FadeTimer { get; private set; }
         public bool IsFading { get; private set; }
 
-        public void FadeIn(float time = 1.0f)
+        public void FadeIn(float time = 0.5f)
         {
             if (FadeUIImage != null)
             {
@@ -25,7 +25,7 @@ namespace app.UI
                 FadeTimer = time;
             }
         }
-        public void FadeOut(float time = 1.0f)
+        public void FadeOut(float time = 0.5f)
         {
             if (FadeUIImage != null)
             {
@@ -42,7 +42,7 @@ namespace app.UI
             if (FadeUI != null)
             {
                 FadeUIImage = FadeUI.GetComponent<Image>();
-                FadeUIImage.CrossFadeAlpha(0, 0, true);
+                FadeUIImage.CrossFadeAlpha(1, 0, true);
             }
         }
 

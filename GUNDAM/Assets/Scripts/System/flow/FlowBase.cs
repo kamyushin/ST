@@ -81,13 +81,17 @@ namespace app
         private bool FadeInStart = false;
         private bool FadeOutStart = false;
 
+        protected delegate void OnFlowStartDelegate();
+        protected delegate void OnFlowEndDelegate();
+        protected OnFlowStartDelegate OnFlowStart = null;
+        protected OnFlowEndDelegate OnFlowEnd = null;
+
         private void Awake()
         {
 #if UNITY_EDITOR
             //Bootじゃない場合ResidentをLoadしに行く
             CheckResident();
 #endif
-
             RegistPhase();
 
             Phase.Setup();
@@ -95,6 +99,11 @@ namespace app
 
         private void Start()
         {
+            if ( OnFlowStart != null)
+            {
+                OnFlowStart.Invoke();
+            }
+
             if (UI.FadeManager.IsInstanceEnable)
             {
                 if (!UI.FadeManager.Instance.IsFading)
@@ -160,6 +169,10 @@ namespace app
                 if (FlowManager.IsInstanceEnable)
                 {
                     FlowManager.Instance.RequestUnload(FlowType);
+                }
+
+                if (OnFlowEnd != null) {
+                    OnFlowEnd.Invoke();
                 }
             }
 
